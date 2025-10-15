@@ -29,7 +29,7 @@ export const Setting = () => {
 
     try {
       setIsTesting(true);
-      const audio = new Audio("/test.mp3"); 
+      const audio = new Audio("/test.mp3");
       //@ts-ignore
       if (audio?.setSinkId) {
         //@ts-ignore
@@ -59,11 +59,12 @@ export const Setting = () => {
           <select
             value={soundOutput || ""}
             onChange={(e) => dispatch(setSoundOutput(e.target.value as string))}
-            className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
+            title={audioOutput.find(device => device.deviceId === soundOutput)?.label || "Select audio output"}
           >
             {audioOutput.map((device: IDevice) => (
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label || "Unknown speaker"}
+              <option key={device.deviceId} value={device.deviceId} title={device.label || "Unknown speaker"}>
+                {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
               </option>
             ))}
           </select>
@@ -71,9 +72,8 @@ export const Setting = () => {
           <button
             onClick={playTestSound}
             disabled={isTesting}
-            className={`${
-              isTesting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-            } text-white p-3 rounded-lg transition-colors duration-200 flex items-center gap-2`}
+            className={`${isTesting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+              } text-white p-3 rounded-lg transition-colors duration-200 flex items-center gap-2`}
           >
             <VolumeUpIcon className="w-5 h-5" />
             {isTesting ? "Testing..." : "Test"}
@@ -84,7 +84,7 @@ export const Setting = () => {
       {/* Microphone Output Section */}
       <div className="mb-6">
         <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-          MicrophoneOutput
+          Microphone
           {!microphone.granted && (
             <div className="relative group">
               <ErrorIcon className="text-red-500 w-4 h-4" />
@@ -97,11 +97,14 @@ export const Setting = () => {
         <select
           value={microphoneOutput || ""}
           onChange={(e) => dispatch(setMicrophoneOutput(e.target.value as string))}
-          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
+          title={audioInput.find(device => device.deviceId === microphoneOutput)?.label || "Select microphone"}
         >
           {audioInput.map((device: IDevice) => (
-            <option key={device.deviceId} value={device.deviceId}>
-              {device.label}
+            <option className="max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap" key={device.deviceId} value={device.deviceId} title={device.label}>
+              <option key={device.deviceId} value={device.deviceId}>
+                {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
+              </option>
             </option>
           ))}
         </select>
@@ -123,14 +126,12 @@ export const Setting = () => {
         <select
           value={cameraOutput || ""}
           onChange={(e) => dispatch(setCameraOutput(e.target.value as string))}
-          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
+          title={cameraOutput === "none" ? "No camera selected" : cameraDevices.find(device => device.deviceId === cameraOutput)?.label || "Select camera"}
         >
-          <option key={"none"} value={"none"}>
-            none
-          </option>
           {cameraDevices.map((device: IDevice) => (
-            <option key={device.deviceId} value={device.deviceId}>
-              {device.label}
+            <option key={device.deviceId} value={device.deviceId} title={device.label}>
+              {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
             </option>
           ))}
         </select>
