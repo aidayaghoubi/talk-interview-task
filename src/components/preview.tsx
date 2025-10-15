@@ -99,7 +99,7 @@ export const Preview = () => {
   };
 
   return (
-    <div className="relative bg-gray-800 rounded-lg h-96 flex items-center justify-center">
+    <div className="relative bg-gray-800 rounded-lg h-[30rem] flex items-center justify-center">
       {cameraOutput ? (
         <video
           ref={videoRef}

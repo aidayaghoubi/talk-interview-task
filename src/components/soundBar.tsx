@@ -84,11 +84,11 @@ export const SoundBar = () => {
   }
 
   return (
-    <div className="flex flex-col items-start justify-start">
+    <div className="flex flex-col w-full items-start justify-start">
       <h2 className="text-lg font-semibold text-gray-700 mb-4">Microphone Level</h2>
       <div className="flex gap-4 w-full items-center justify-start" >
         {microphoneOutput ? (
-          <div className="w-full max-w-lg h-6 bg-gray-200 rounded-full overflow-hidden">
+          <div className="w-full max-w-full h-6 bg-gray-200 rounded-full overflow-hidden">
             <div
               className={`h-6 rounded-full transition-all duration-100 bg-green-500`}
               style={{ width: `${level * 100}%` }}
