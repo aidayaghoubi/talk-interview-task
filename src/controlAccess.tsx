@@ -81,14 +81,16 @@ function ControlAccess() {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen min-w-full p-6 box-border bg-gray-200">
-      <div className="max-w-7xl min-h-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 items-center justify-center">
-        <div className="flex flex-col gap-6 bg-white rounded-lg shadow-lg p-6">
+    <div className="min-w-full  p-6 box-border bg-gray-200">
+      <div className="w-full mx-auto flex gap-6 items-start justify-center">
+        <div className="flex h-full flex-col gap-6 bg-white rounded-lg shadow-lg p-6 w-[70%]">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Live Preview</h2>
           <Preview />
           <SoundBar />
         </div>
-        <Setting />
+        <div className="w-[30%]">
+          <Setting />
+        </div>
       </div>
       <Toast />
     </div>
