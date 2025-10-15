@@ -30,8 +30,10 @@ export const Setting = () => {
     try {
       setIsTesting(true);
       const audio = new Audio("/test.mp3"); 
-      if (audio.setSinkId) {
-        await audio.setSinkId(soundOutput);
+      //@ts-ignore
+      if (audio?.setSinkId) {
+        //@ts-ignore
+        await audio?.setSinkId(soundOutput);
       } else {
         toast("Your browser does not support speaker switching.");
       }
@@ -66,7 +68,6 @@ export const Setting = () => {
             ))}
           </select>
 
-          {/* test speaker button */}
           <button
             onClick={playTestSound}
             disabled={isTesting}
