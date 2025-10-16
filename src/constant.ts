@@ -27,3 +27,9 @@ export const ERROR_STATUS = {
   NotFoundError: 'NotFoundError',
   UnknownError: 'UnknownError'
 }
+
+export const LOCAL_STORAGE_KEYS = {
+  soundOutput: 'soundOutput',
+  cameraOutput: 'cameraOutput',
+  microphoneOutput: 'microphoneOutput'
+}
