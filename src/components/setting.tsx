@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+
 import { IDevice, IRootState } from "../store/type";
 import { setCameraOutput, setMicrophoneOutput, setSoundOutput } from "../store/slice";
-import { ErrorIcon, VolumeUpIcon } from "../svgs";
-import toast from "react-hot-toast";
+import { VolumeUpIcon } from "../svgs";
 import { TOAST_MESSAGES } from "../constant";
 import { SettingDropdown } from "./settingDropown";
 
@@ -81,7 +82,7 @@ export const Setting = () => {
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Settings</h2>
       {formData.map((form) => (
-        <div key={form.label} className="flex items-center gap-2">
+        <div key={form.label} className="flex ">
           <SettingDropdown key={form.label} {...form} />
           {form.label === "Audio output" && (
             <button
