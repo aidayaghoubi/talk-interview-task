@@ -6,7 +6,7 @@ import { VideocamOffIcon, ScreenShareIcon, VideocamIcon } from "../svgs";
 import { IRootState } from "../store/type";
 import { ERROR_STATUS, TOAST_MESSAGES } from "../constant";
 
-export const Preview = () => {
+export const CameraPreviewer = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
@@ -57,7 +57,7 @@ export const Preview = () => {
       }
 
       if (!cameraOutput) {
-        toast.error(TOAST_MESSAGES.NotFoundError);
+        toast.error(TOAST_MESSAGES.CameraNotSelected);
         setIsCameraOn(false);
         return;
       }
@@ -75,7 +75,7 @@ export const Preview = () => {
       if (error.name === ERROR_STATUS.OverconstrainedError) {
         toast.error(TOAST_MESSAGES.CameraNotSelected);
       } else if (error.name === ERROR_STATUS.NotAllowedError) {
-        toast.error(TOAST_MESSAGES.NotAllowedError);
+        toast.error(TOAST_MESSAGES.NotAllowedErrorForCamera);
       } else if (error.name === ERROR_STATUS.NotFoundError) {
         toast.error(TOAST_MESSAGES.NotFoundError);
       } else {
