@@ -4,6 +4,8 @@ import { IDevice, IRootState } from "../store/type";
 import { setCameraOutput, setMicrophoneOutput, setSoundOutput } from "../store/slice";
 import { ErrorIcon, VolumeUpIcon } from "../svgs";
 import toast from "react-hot-toast";
+import { TOAST_MESSAGES } from "../constant";
+import { SettingDropdown } from "./settingDropown";
 
 export const Setting = () => {
   const dispatch = useDispatch();
@@ -23,7 +25,7 @@ export const Setting = () => {
 
   const playTestSound = async () => {
     if (!soundOutput) {
-      toast("Please select a speaker to test.");
+      toast(TOAST_MESSAGES.PleaseSelectASpeakerToTest);
       return;
     }
 
@@ -35,7 +37,7 @@ export const Setting = () => {
         //@ts-ignore
         await audio?.setSinkId(soundOutput);
       } else {
-        toast("Your browser does not support speaker switching.");
+        toast(TOAST_MESSAGES.YourBrowserDoesNotSupportSpeakerSwitching);
       }
 
       await audio.play();
@@ -43,99 +45,57 @@ export const Setting = () => {
       // stop testing state after 3 seconds
       setTimeout(() => setIsTesting(false), 3000);
     } catch (err) {
-      toast.error(`Speaker test failed: ${err}`);
+      toast.error(`${TOAST_MESSAGES.SpeakerTestFailed}: ${err}`);
       setIsTesting(false);
     }
   };
 
+  const formData = [
+    {
+      label: "Audio output",
+      value: soundOutput || "",
+      onChange: (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(setSoundOutput(e.target.value as string)),
+      options: audioOutput,
+      status: true,
+      error: "",
+    },
+    {
+      label: "Microphone",
+      value: microphoneOutput || "",
+      onChange: (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(setMicrophoneOutput(e.target.value as string)),
+      options: audioInput,
+      status: microphone.granted,
+      error: microphone.error,
+    },
+    {
+      label: "Video input",
+      value: cameraOutput || "",
+      onChange: (e: React.ChangeEvent<HTMLSelectElement>) => dispatch(setCameraOutput(e.target.value as string)),
+      options: cameraDevices,
+      status: camera.granted,
+      error: camera.error,
+    },
+  ]
+
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Settings</h2>
-
-      {/* Audio output Section */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Audio output</h3>
-        <div className="flex items-center gap-3">
-          <select
-            value={soundOutput || ""}
-            onChange={(e) => dispatch(setSoundOutput(e.target.value as string))}
-            className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
-            title={audioOutput.find(device => device.deviceId === soundOutput)?.label || "Select audio output"}
-          >
-            {audioOutput.map((device: IDevice) => (
-              <option key={device.deviceId} value={device.deviceId} title={device.label || "Unknown speaker"}>
-                {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={playTestSound}
-            disabled={isTesting}
-            className={`${isTesting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
-              } text-white p-3 rounded-lg transition-colors duration-200 flex items-center gap-2`}
-          >
-            <VolumeUpIcon className="w-5 h-5" />
-            {isTesting ? "Testing..." : "Test"}
-          </button>
+      {formData.map((form) => (
+        <div key={form.label} className="flex items-center gap-2">
+          <SettingDropdown key={form.label} {...form} />
+          {form.label === "Audio output" && (
+            <button
+              onClick={playTestSound}
+              disabled={isTesting}
+              className={`${isTesting ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+                } text-white p-3 rounded-lg transition-colors duration-200 flex items-center gap-2`}
+            >
+              <VolumeUpIcon className="w-5 h-5" />
+              {isTesting ? "Testing..." : "Test"}
+            </button>
+          )}
         </div>
-      </div>
-
-      {/* Microphone Output Section */}
-      <div className="mb-6">
-        <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-          Microphone
-          {!microphone.granted && (
-            <div className="relative group">
-              <ErrorIcon className="text-red-500 w-4 h-4" />
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                {microphone.error}
-              </div>
-            </div>
-          )}
-        </h3>
-        <select
-          value={microphoneOutput || ""}
-          onChange={(e) => dispatch(setMicrophoneOutput(e.target.value as string))}
-          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
-          title={audioInput.find(device => device.deviceId === microphoneOutput)?.label || "Select microphone"}
-        >
-          {audioInput.map((device: IDevice) => (
-            <option className="max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap" key={device.deviceId} value={device.deviceId} title={device.label}>
-              <option key={device.deviceId} value={device.deviceId}>
-                {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
-              </option>
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Video Input Section */}
-      <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
-          Video Input
-          {!camera.granted && (
-            <div className="relative group">
-              <ErrorIcon className="text-red-500 w-4 h-4" />
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                {camera.error}
-              </div>
-            </div>
-          )}
-        </h3>
-        <select
-          value={cameraOutput || ""}
-          onChange={(e) => dispatch(setCameraOutput(e.target.value as string))}
-          className="w-full bg-gray-100 rounded-lg px-4 py-3 border-0 focus:ring-2 focus:ring-blue-500 focus:outline-none text-ellipsis overflow-hidden whitespace-nowrap"
-          title={cameraOutput === "none" ? "No camera selected" : cameraDevices.find(device => device.deviceId === cameraOutput)?.label || "Select camera"}
-        >
-          {cameraDevices.map((device: IDevice) => (
-            <option key={device.deviceId} value={device.deviceId} title={device.label}>
-              {device.label.length > 50 ? device.label.slice(0, 50) + "..." : device.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      ))}
     </div>
   );
 };
