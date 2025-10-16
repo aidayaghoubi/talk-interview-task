@@ -54,7 +54,7 @@ export const SoundBar = () => {
         setIsMuted(false);
         update();
       } catch (err) {
-        console.error("Microphone    error:", err);
+        console.error("Microphone error:", err);
       }
     };
     startMic();
@@ -76,7 +76,6 @@ export const SoundBar = () => {
   }
 
   function unmuteSound() {
-
     if (sourceRef.current) {
       sourceRef.current.connect(analyserRef.current!);
       setIsMuted(false);
