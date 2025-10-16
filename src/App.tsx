@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { SettingsIcon } from './svgs';
-import ControlAccess from './controlAccess';
+import ControlAccess from './components/controlAccess';
 
 function App() {
   const [showSettings, setShowSettings] = useState(false);

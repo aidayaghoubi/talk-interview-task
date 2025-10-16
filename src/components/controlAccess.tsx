@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
-import "./App.css";
-import { CameraPreviewer } from "./components/cameraPreviewer";
-import { Setting } from "./components/setting";
-import { setDevices, setCameraPermission, setMicrophonePermission } from "./store/slice";
-import { ERROR_STATUS, TOAST_MESSAGES } from "./constant";
-import { Toast } from "./components/Toast";
-import { SoundBar } from "./components/soundBar";
+import { CameraPreviewer } from "./cameraPreviewer";
+import { Setting } from "./setting";
+import { setDevices, setCameraPermission, setMicrophonePermission } from "../store/slice";
+import { ERROR_STATUS, TOAST_MESSAGES } from "../constant";
+import { Toast } from "./Toast";
+import { SoundBar } from "./soundBar";
 
 const HTTPS = "https:";
 const LOCALHOST = "localhost";
